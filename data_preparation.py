@@ -1,4 +1,25 @@
+from pathlib import Path
+
 import pandas as pd
+
+
+def load_synthetic_data(pad: Path | str) -> pd.DataFrame:
+    """
+    Leest de synthetische dataset in. Instroom, doorstroom
+    en uitstroom zijn daarin al bepaald, dus
+    prepare_student_data is niet nodig.
+
+    Args:
+        pad: Pad naar synthetisch.csv.
+
+    Returns:
+        Data met kolomnamen zoals prepare_markov_data ze verwacht.
+    """
+
+    return pd.read_csv(pad).rename(columns={
+        'id': 'student_id',
+        'Studiejaar': 'studiejaar',
+    })
 
 
 def prepare_student_data(student_data, crebo_data):
