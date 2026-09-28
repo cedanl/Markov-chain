@@ -10,3 +10,11 @@ dependencies = [
     "scikit-learn",
     "statsmodels",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

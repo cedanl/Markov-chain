@@ -22,20 +22,24 @@ def load_synthetic_data(pad: Path | str) -> pd.DataFrame:
     })
 
 
-def prepare_student_data(student_data, crebo_data):
+def prepare_student_data(student_data: pd.DataFrame) -> pd.DataFrame:
     """
     Schoont de studentdata op en bepaalt
     instroom, doorstroom en uitstroom.
+
+    Args:
+        student_data: Bronexport met één regel per inschrijving.
+            Zie README voor de kolommen.
+
+    Returns:
+        Data met kolomnamen zoals prepare_markov_data ze verwacht.
     """
 
     # Kolomnamen studentdata versimpelen
-    student_data = student_data.rename(columns={
+    df = student_data.rename(columns={
         'Deelnemernummer': 'student_id',
         'Volgnummer': 'volgnummer',
         'Studiejaar': 'studiejaar',
-        'Deelnemer_geslacht': 'geslacht',
-        'Leerweg': 'leerweg',
-        'College': 'college',
         'Cluster': 'cluster',
     })
 
@@ -52,11 +56,7 @@ def prepare_student_data(student_data, crebo_data):
         'einddatum',
         'student_id',
         'volgnummer',
-        'geslacht',
-        'leerweg',
         'niveau',
-        'college',
-        'cluster',
     ]
     df = df[columns].drop_duplicates()
 
@@ -64,10 +64,7 @@ def prepare_student_data(student_data, crebo_data):
     df['begindatum'] = pd.to_datetime(df['begindatum'])
     df['einddatum'] = pd.to_datetime(df['einddatum'])
 
-    df['studiejaar'] = ( df['studiejaar'] .str[:4] .astype(int))
-
-    # Bepalen of student ooit geslaagd is
-    df['ooit_geslaagd'] = ( df.groupby('student_id')['geslaagd'] .transform('max'))
+    df['studiejaar'] = ( df['studiejaar'].astype(str) .str[:4] .astype(int))
 
     # Peildatum: 1 oktober
     df['peildatum'] = pd.to_datetime( df['studiejaar'].astype(str) + '-10-01')

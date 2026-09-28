@@ -1,6 +1,8 @@
 from pathlib import Path
 
-from data_preparation import load_synthetic_data
+import pandas as pd
+
+from data_preparation import load_synthetic_data, prepare_student_data
 from markov_model import run_model
 from markov_preparation import prepare_markov_data
 
@@ -8,16 +10,21 @@ from markov_preparation import prepare_markov_data
 # CONFIGURATIE
 # --------------------------------------------------
 
-DATA_PAD = Path(__file__).parent / "synthetisch.csv"
+# "synthetisch" of "bronexport"
+DATA_BRON = "synthetisch"
+
+SYNTHETISCH_PAD = Path(__file__).parent / "synthetisch.csv"
+BRONEXPORT_PAD = Path(__file__).parent / "voorbeeld_bronexport.csv"
 
 
 # --------------------------------------------------
 # DATA INLADEN
 # --------------------------------------------------
 
-# Echte brondata loopt via prepare_student_data(student_data, crebo_data).
-# Die functie werkt nog niet; tot die tijd draait het model op synthetische data.
-clean_data = load_synthetic_data(DATA_PAD)
+if DATA_BRON == "bronexport":
+    clean_data = prepare_student_data(pd.read_csv(BRONEXPORT_PAD))
+else:
+    clean_data = load_synthetic_data(SYNTHETISCH_PAD)
 
 
 # --------------------------------------------------
@@ -37,7 +44,8 @@ print(markov_data.head())
 # MARKOV MODEL
 # --------------------------------------------------
 
-# De synthetische data loopt van 2015 t/m 2023
+# De synthetische data loopt van 2015 t/m 2023.
+# Pas de jaren aan bij een bronexport.
 TRAIN_JAREN = range(2016, 2022)
 TEST_JAREN = [2022, 2023]
 PROGNOSE_JAREN = [2024]
