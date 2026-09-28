@@ -1,33 +1,30 @@
-
+from pathlib import Path
 
 import pandas as pd
 
-from data_preparation import prepare_student_data
-from markov_preparation import prepare_markov_data
+from data_preparation import load_synthetic_data, prepare_student_data
 from markov_model import run_model
+from markov_preparation import prepare_markov_data
+
+# --------------------------------------------------
+# CONFIGURATIE
+# --------------------------------------------------
+
+# "synthetisch" of "bronexport"
+DATA_BRON = "synthetisch"
+
+SYNTHETISCH_PAD = Path(__file__).parent / "synthetisch.csv"
+BRONEXPORT_PAD = Path(__file__).parent / "voorbeeld_bronexport.csv"
 
 
 # --------------------------------------------------
 # DATA INLADEN
 # --------------------------------------------------
 
-student_data = pd.read_csv(
-    r"C:\Users\HMUSS\OneDrive - Albeda\Bureaublad\Npulse\Dataset28052026.csv"
-)
-
-crebo_data = pd.read_excel(
-    r"C:\Users\HMUSS\OneDrive - Albeda\Bureaublad\Npulse\crebokoppeltabel.xlsx"
-)
-
-
-# --------------------------------------------------
-# DATA VOORBEREIDEN
-# --------------------------------------------------
-
-clean_data = prepare_student_data(
-    student_data,
-    crebo_data
-)
+if DATA_BRON == "bronexport":
+    clean_data = prepare_student_data(pd.read_csv(BRONEXPORT_PAD))
+else:
+    clean_data = load_synthetic_data(SYNTHETISCH_PAD)
 
 
 # --------------------------------------------------
@@ -47,11 +44,13 @@ print(markov_data.head())
 # MARKOV MODEL
 # --------------------------------------------------
 
-TRAIN_JAREN = range(2018, 2024)
-TEST_JAREN = [2024, 2025]
-PROGNOSE_JAREN = [2026]
+# De synthetische data loopt van 2015 t/m 2023.
+# Pas de jaren aan bij een bronexport.
+TRAIN_JAREN = range(2016, 2022)
+TEST_JAREN = [2022, 2023]
+PROGNOSE_JAREN = [2024]
 
-INSTROOM_AANNAME_JAAR = 2025
+INSTROOM_AANNAME_JAAR = 2023
 
 MODELLEN = [
     'regressie',

@@ -1,0 +1,20 @@
+[project]
+name = "markov-chain"
+version = "0.1.0"
+description = "Voorspelling van doorstroom en uitstroom met Markov-ketens"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "statsmodels",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
