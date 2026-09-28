@@ -474,13 +474,15 @@ def run_model(
             'stationair'
         ]
 
-    # Overgangsmatrices maken
+    startjaar = max(train_jaren)
+
+    # Overgangsmatrices maken. Het startjaar zelf niet meenemen:
+    # de matrix van dat jaar bevat de overgang naar het eerste
+    # testjaar, en die moet het model juist voorspellen.
     model_matrices = maak_modellen(
         df,
-        train_jaren
+        [jaar for jaar in train_jaren if jaar < startjaar]
     )
-
-    startjaar = max(train_jaren)
 
     voorspel_jaren = (
         list(test_jaren)

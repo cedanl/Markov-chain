@@ -46,6 +46,13 @@ print(markov_data.head())
 
 # De synthetische data loopt van 2015 t/m 2023.
 # Pas de jaren aan bij een bronexport.
+#
+# Het laatste trainjaar is het startjaar: de voorspelling begint
+# bij de werkelijke aantallen van dat jaar. De overgangskansen
+# komen uit de trainjaren daarvoor (hier 2016 t/m 2020, dus de
+# overgangen tot en met 2020 -> 2021). Testjaren zijn jaren met
+# bekende uitkomst; die vergelijken we met de voorspelling om de
+# foutmarge te bepalen. Prognosejaren liggen in de toekomst.
 TRAIN_JAREN = range(2016, 2022)
 TEST_JAREN = [2022, 2023]
 PROGNOSE_JAREN = [2024]
